@@ -1,0 +1,60 @@
+/* 프로젝트 상세 페이지 전용 스타일 (../style.css 위에 덧씌움) */
+.project-hero { padding: 56px 24px 56px; }
+.back { display: inline-block; margin-bottom: 28px; color: var(--muted); text-decoration: none; font-size: 14px; }
+.back:hover { color: var(--accent); }
+.project-hero h1 { font-size: clamp(26px, 4vw, 40px); letter-spacing: -0.02em; margin-bottom: 16px; }
+.project-hero .tags { margin-top: 24px; }
+
+.meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 32px 0 0; }
+.meta div { border-top: 1px solid var(--line); padding-top: 10px; }
+.meta dt { font-size: 13px; color: var(--muted); }
+.meta dd { margin: 4px 0 0; font-weight: 500; }
+
+/* 아직 채우지 않은 칸 */
+.placeholder { color: var(--muted); font-style: italic; opacity: .75; }
+.placeholder-title { color: var(--muted); }
+p.placeholder { margin: 8px 0 0; }
+
+.star-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.star-item { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 24px; }
+.star-key {
+  display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 8px;
+  background: var(--accent-soft); color: var(--accent); font-family: var(--mono); font-weight: 500;
+}
+.star-item h3 { font-size: 16px; margin-top: 12px; }
+
+.metrics { margin-top: 0; grid-template-columns: repeat(3, 1fr); }
+.metrics p { font-size: 13px; margin: 4px 0 0; }
+
+.decision-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.decision-list li { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 10px; padding: 18px 22px; }
+.decision-list h3 { font-size: 16px; }
+
+.arch { margin: 0; }
+.arch-slot {
+  border: 2px dashed var(--line); border-radius: var(--radius); background: var(--surface);
+  min-height: 280px; display: grid; place-items: center; text-align: center;
+  color: var(--muted); padding: 24px;
+}
+.arch img { width: 100%; border-radius: var(--radius); border: 1px solid var(--line); }
+.arch figcaption { margin-top: 12px; }
+
+.trouble { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px 28px; }
+.trouble + .trouble { margin-top: 18px; }
+.trouble > h3 { font-size: 18px; margin-bottom: 8px; }
+.trouble-step { padding: 14px 0 0 16px; border-left: 2px solid var(--line); margin-top: 14px; }
+.trouble-step h4 { margin: 0; font-size: 14px; color: var(--accent); }
+
+.other-list { display: flex; flex-wrap: wrap; gap: 10px; }
+.other-list a {
+  padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+  text-decoration: none; font-size: 14px;
+}
+.other-list a:hover { border-color: var(--accent); color: var(--accent); }
+
+@media (max-width: 760px) {
+  .project-hero { padding: 40px 16px; }
+  .meta { grid-template-columns: repeat(2, 1fr); }
+  .star-grid, .metrics { grid-template-columns: 1fr; }
+  .trouble { padding: 20px; }
+}
