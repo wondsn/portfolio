@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>판매자센터 통계 서비스 아키텍처</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Serif:ital@0;1&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #f5f5f5;
+      --color-ink:     #2d3142;
+      --color-muted:   #4f5d75;
+      --color-accent:  #bf4520;
+      --font-sans:     'Geist', 'Noto Sans KR', system-ui, sans-serif;
+      --font-serif:    'Instrument Serif', 'Noto Serif', 'Noto Serif KR', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1280px; display: block; }
+    @media print {
+      .diagram-container { overflow-x: visible; }
+      svg { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · Seller Insight</p>
+    <h1>판매자센터 통계 서비스 아키텍처</h1>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 1280 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="seller-stats-architecture-title seller-stats-architecture-desc">
+        <title id="seller-stats-architecture-title">판매자센터 통계 서비스 아키텍처</title>
+        <desc id="seller-stats-architecture-desc">페이지뷰 스트림과 원천 DB 데이터를 Databricks에서 집계해 Elasticsearch와 ESMPLUSDB에 적재하고, 통계 BE가 이를 조회해 통계 FE와 ESM+ 타 도메인에 제공하는 구조.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+          <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+          <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="0.9" fill="rgba(45,49,66,0.10)"/>
+          </pattern>
+        </defs>
+
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+        <rect width="100%" height="100%" fill="url(#dots)" opacity="0.55"/>
+
+        <!-- Zones -->
+        <rect x="32" y="144" width="200" height="368" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <rect x="100" y="148" width="64" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="132" y="157" fill="#5a6580" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">SOURCES</text>
+
+        <rect x="560" y="144" width="200" height="368" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <rect x="620" y="148" width="80" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="660" y="157" fill="#5a6580" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">SERVING STORE</text>
+
+        <!-- Arrows (drawn before nodes) -->
+        <!-- Kafka -> Databricks : realtime read (stream) -->
+        <path d="M 216,208 H 396 Q 404,208 404,216 V 304" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+        <!-- Source DB -> Databricks : delayed write (D-1 table load) -->
+        <path d="M 216,452 H 396 Q 404,452 404,444 V 368" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <!-- Source DB -> ESMPLUSDB : realtime sync -->
+        <line x1="216" y1="476" x2="576" y2="476" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <!-- Databricks -> Elasticsearch : delayed write (daily / weekly / monthly) -->
+        <path d="M 488,324 H 524 Q 532,324 532,316 V 216 Q 532,208 540,208 H 576" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <!-- Databricks -> ESMPLUSDB : delayed write (hourly) -->
+        <path d="M 488,348 H 524 Q 532,348 532,356 V 444 Q 532,452 540,452 H 576" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <!-- Elasticsearch -> Stats BE : realtime read -->
+        <path d="M 744,208 H 896 Q 904,208 904,216 V 304" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+        <!-- ESMPLUSDB -> Stats BE : realtime read (today) -->
+        <path d="M 744,464 H 896 Q 904,464 904,456 V 368" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+        <!-- Stats FE <-> Stats BE : API -->
+        <path d="M 1100,240 V 312 Q 1100,320 1092,320 H 1016" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-start="url(#arrow-link)" marker-end="url(#arrow-link)"/>
+        <!-- ESM+ other domain <-> Stats BE -->
+        <path d="M 1064,452 H 968 Q 960,452 960,444 V 368" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-start="url(#arrow-link)" marker-end="url(#arrow-link)"/>
+        <!-- Seller <-> Stats FE -->
+        <line x1="1148" y1="120" x2="1148" y2="176" stroke="#2e5aa8" stroke-width="1.2" marker-start="url(#arrow-link)" marker-end="url(#arrow-link)"/>
+
+        <!-- Arrow labels -->
+        <rect x="412" y="248" width="56" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="440" y="257" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">PAGE VIEW</text>
+
+        <rect x="340" y="400" width="56" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="368" y="409" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">D-1 LOAD</text>
+
+        <rect x="260" y="484" width="80" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="300" y="493" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">REALTIME SYNC</text>
+
+        <rect x="440" y="280" width="84" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="482" y="289" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">DAY/WEEK/MONTH</text>
+
+        <rect x="484" y="392" width="40" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="504" y="401" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HOURLY</text>
+
+        <rect x="1108" y="268" width="52" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="1134" y="277" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">REST API</text>
+
+        <!-- Node: Kafka (store) -->
+        <rect x="48" y="176" width="168" height="64" rx="6" fill="#f5f5f5"/>
+        <rect x="48" y="176" width="168" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+        <rect x="56" y="184" width="40" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+        <text x="76" y="193" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">STREAM</text>
+        <text x="132" y="212" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Kafka</text>
+        <text x="132" y="228" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">UTS · app/web view</text>
+
+        <!-- Node: Source DB (store) -->
+        <rect x="48" y="432" width="168" height="64" rx="6" fill="#f5f5f5"/>
+        <rect x="48" y="432" width="168" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+        <rect x="56" y="440" width="24" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+        <text x="68" y="449" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
+        <text x="132" y="468" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">원천 DB</text>
+        <text x="132" y="484" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">GMKT · IAC core/sync</text>
+
+        <!-- Node: Databricks (focal) -->
+        <rect x="320" y="304" width="168" height="64" rx="6" fill="#f5f5f5"/>
+        <rect x="320" y="304" width="168" height="64" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+        <rect x="328" y="312" width="28" height="12" rx="2" fill="transparent" stroke="rgba(191,69,32,0.50)" stroke-width="0.8"/>
+        <text x="342" y="321" fill="#bf4520" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AGG</text>
+        <text x="404" y="340" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Databricks</text>
+        <text x="404" y="356" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">Spark · BAIKAL X</text>
+
+        <!-- Node: Elasticsearch (store) -->
+        <rect x="576" y="176" width="168" height="64" rx="6" fill="#f5f5f5"/>
+        <rect x="576" y="176" width="168" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+        <rect x="584" y="184" width="40" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+        <text x="604" y="193" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SEARCH</text>
+        <text x="660" y="212" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Elasticsearch</text>
+        <text x="660" y="228" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">SMTES · trend · TOP 50</text>
+
+        <!-- Node: ESMPLUSDB (store) -->
+        <rect x="576" y="432" width="168" height="64" rx="6" fill="#f5f5f5"/>
+        <rect x="576" y="432" width="168" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+        <rect x="584" y="440" width="28" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+        <text x="598" y="449" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">RDB</text>
+        <text x="660" y="468" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">ESMPLUSDB</text>
+        <text x="660" y="484" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">today · hourly stats</text>
+
+        <!-- Node: Stats BE (focal) -->
+        <rect x="848" y="304" width="168" height="64" rx="6" fill="#f5f5f5"/>
+        <rect x="848" y="304" width="168" height="64" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+        <rect x="856" y="312" width="28" height="12" rx="2" fill="transparent" stroke="rgba(191,69,32,0.50)" stroke-width="0.8"/>
+        <text x="870" y="321" fill="#bf4520" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">API</text>
+        <text x="932" y="340" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">통계 BE</text>
+        <text x="932" y="356" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">API · Excel server</text>
+
+        <!-- Node: Stats FE (backend) -->
+        <rect x="1064" y="176" width="168" height="64" rx="6" fill="#f5f5f5"/>
+        <rect x="1064" y="176" width="168" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="1072" y="184" width="28" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="1086" y="193" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">WEB</text>
+        <text x="1148" y="212" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">통계 FE</text>
+        <text x="1148" y="228" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">selling-insight.esmplus.com</text>
+
+        <!-- Node: Seller (input) -->
+        <rect x="1064" y="56" width="168" height="64" rx="6" fill="#f5f5f5"/>
+        <rect x="1064" y="56" width="168" height="64" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+        <rect x="1072" y="64" width="32" height="12" rx="2" fill="transparent" stroke="rgba(90,101,128,0.40)" stroke-width="0.8"/>
+        <text x="1088" y="73" fill="#5a6580" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">USER</text>
+        <text x="1148" y="92" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">판매자</text>
+        <text x="1148" y="108" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">browser</text>
+
+        <!-- Node: ESM+ other domain (input) -->
+        <rect x="1064" y="432" width="168" height="64" rx="6" fill="#f5f5f5"/>
+        <rect x="1064" y="432" width="168" height="64" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+        <rect x="1072" y="440" width="44" height="12" rx="2" fill="transparent" stroke="rgba(90,101,128,0.40)" stroke-width="0.8"/>
+        <text x="1094" y="449" fill="#5a6580" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CLIENT</text>
+        <text x="1148" y="468" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">ESM+ 타 도메인</text>
+        <text x="1148" y="484" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">internal API</text>
+
+        <!-- Legend strip -->
+        <line x1="32" y1="536" x2="1248" y2="536" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <text x="32" y="556" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+
+        <rect x="32" y="570" width="14" height="10" rx="2" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+        <text x="52" y="580" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">핵심 컴포넌트</text>
+
+        <rect x="160" y="570" width="14" height="10" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="180" y="580" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">서비스</text>
+
+        <rect x="248" y="570" width="14" height="10" rx="2" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+        <text x="268" y="580" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">저장소</text>
+
+        <rect x="336" y="570" width="14" height="10" rx="2" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+        <text x="356" y="580" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">사용자</text>
+
+        <line x1="452" y1="575" x2="480" y2="575" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <text x="488" y="580" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">실시간 write</text>
+
+        <line x1="600" y1="575" x2="628" y2="575" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <text x="636" y="580" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">지연 write (배치)</text>
+
+        <line x1="772" y1="575" x2="800" y2="575" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+        <text x="808" y="580" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">실시간 read · 요청</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

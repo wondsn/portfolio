@@ -58,3 +58,17 @@ p.placeholder { margin: 8px 0 0; }
   .star-grid, .metrics { grid-template-columns: 1fr; }
   .trouble { padding: 20px; }
 }
+
+/* 인라인 아키텍처 다이어그램: viewBox 폭(1280)을 유지하고, 좁은 화면에서는 이 영역만 가로 스크롤 */
+.arch:has(.diagram-container) {
+  width: min(1282px, 100vw - 32px);
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+.arch .diagram-container {
+  width: 100%; overflow-x: auto;
+  border: 1px solid var(--line); border-radius: var(--radius);
+}
+.arch .diagram-container svg { width: 100%; min-width: 1280px; display: block; }
+.arch .arch-open { display: inline-block; margin-top: 12px; }
+.arch:has(.diagram-container) figcaption { max-width: 1040px; }
