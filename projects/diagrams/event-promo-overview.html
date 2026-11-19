@@ -27,7 +27,7 @@
     <div class="diagram-container">
 <svg viewBox="0 0 1280 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="event-promo-overview-title event-promo-overview-desc" style="min-width:1280px">
 <title id="event-promo-overview-title">이벤트 프로모션 아키텍처</title>
-<desc id="event-promo-overview-desc">관리자와 셀러가 행사 설정 DB에 쓴 데이터를 Databricks가 15분 주기로 집계해 기준가와 참여상품을 만들고, 기준가를 벗어난 상품과 판매건수 0건 상품은 같은 Kafka 토픽으로 발행해 예외처리 App이 소비·제외 처리하며, 참여상품을 이벤트 API와 쿠폰·검색 서비스로 싱크하는 구조를 영역별로 나눈 그림.</desc>
+<desc id="event-promo-overview-desc">관리자와 셀러가 행사 설정 DB에 쓴 데이터를 Databricks가 15분 주기로 집계해 기준가와 참여상품을 만들고, 기준가 이탈 등 제외 조건에 해당하는 상품은 Kafka 토픽으로 발행해 예외처리 App이 소비·제외 처리하며, 참여상품을 이벤트 API와 쿠폰·검색 서비스로 싱크하는 구조를 영역별로 나눈 그림.</desc>
 <defs>
 <marker id="event-promo-overview-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
 <marker id="event-promo-overview-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
@@ -105,7 +105,7 @@
 <path d="M 690,256 H 830 A 10,32 0 0 1 830,320 H 690 A 10,32 0 0 1 690,256 Z" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
 <ellipse cx="830" cy="288" rx="10" ry="32" fill="none" stroke="#4f5d75" stroke-width="1"/>
 <text x="754" y="286" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Kafka</text>
-<text x="754" y="302" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">off-price · 0 sales</text>
+<text x="754" y="302" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">exclude goods</text>
 <path d="M 864,168 A 80,8 0 0 1 1024,168 V 216 A 80,8 0 0 1 864,216 Z" fill="#f5f5f5"/>
 <path d="M 864,168 A 80,8 0 0 1 1024,168 V 216 A 80,8 0 0 1 864,216 Z" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
 <path d="M 864,168 A 80,8 0 0 0 1024,168" fill="none" stroke="#bf4520" stroke-width="1"/>

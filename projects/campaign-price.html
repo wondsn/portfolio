@@ -45,18 +45,18 @@
           <div class="star-item">
             <span class="star-key">S</span>
             <h3>Situation · 상황</h3>
-            <p>이벤트 프로모션의 참여상품은 참여 판매자의 전체 상품에서 예외 상품을 빼는 구조였습니다. 그래서 쿠폰·검색 서비스로 싱크할 때마다 참여상품 기준으로 데이터를 새로 집계해야 했습니다. 여기에 판매건수 0건 상품을 제외하는 조건이 추가되면서 예외 상품이 크게 늘었고, 싱크할 데이터가 많아져 이벤트 시작일까지 참여상품 데이터를 만들지 못하는 문제가 생겼습니다.</p>
+            <p>이벤트 프로모션의 참여상품은 참여 판매자의 전체 상품에서 예외 상품을 빼는 구조였습니다. 그래서 쿠폰·검색 서비스로 싱크할 때마다 참여상품 기준으로 데이터를 새로 집계해야 했습니다. 여기에 여러 제외 조건이 붙으면서 예외 상품이 크게 늘었고, 싱크 성능이 느려져 이벤트 시작일까지 참여상품 데이터를 만들지 못하는 문제가 생겼습니다.</p>
           </div>
           <div class="star-item">
             <span class="star-key">T</span>
             <h3>Task · 과제</h3>
             <p>참여상품 데이터를 미리 만들어 두고 쿠폰·검색 쪽에 그대로 싱크하는 구조로 바꾸는 것이 목표였습니다. BE 1명, 데이터 엔지니어 1명으로 진행했고, 저는 데이터 파이프라인을 맡았습니다.</p>
-            <ul class="star-list"><li>Databricks 참여상품 집계</li><li>집계한 참여상품의 RDB · Redis 데이터 서빙</li><li>기준가 이탈 · 판매건수 0건 상품 집계 및 Kafka 토픽 발행</li></ul>
+            <ul class="star-list"><li>Databricks 참여상품 집계</li><li>집계한 참여상품의 RDB · Redis 데이터 서빙</li><li>제외 대상 상품 집계 및 Kafka 토픽 발행</li></ul>
           </div>
           <div class="star-item">
             <span class="star-key">A</span>
             <h3>Action · 행동</h3>
-            <ul class="star-list"><li>행사 설정 DB의 행사·참여 판매자·예외 정보를 바탕으로 Databricks에서 참여상품을 직접 집계</li><li>집계한 참여상품을 RDB와 Redis에 적재해 쿠폰·검색 싱크와 상품 상세 API에 각각 서빙</li><li>기준가를 벗어난 상품과 판매건수 0건 상품을 집계해 같은 Kafka 토픽으로 발행하고, 예외처리 App이 소비해 예외 상품으로 반영</li></ul>
+            <ul class="star-list"><li>행사 설정 DB의 행사·참여 판매자·예외 정보를 바탕으로 Databricks에서 참여상품을 직접 집계</li><li>집계한 참여상품을 RDB와 Redis에 적재해 쿠폰·검색 싱크와 상품 상세 API에 각각 서빙</li><li>기준가 이탈 등 제외 조건에 해당하는 상품을 집계해 Kafka 토픽으로 발행하고, 예외처리 App이 소비해 예외 상품으로 반영</li></ul>
           </div>
           <div class="star-item">
             <span class="star-key">R</span>
@@ -86,7 +86,7 @@
           </li>
           <li>
             <h3>Kafka 경유 예외 처리</h3>
-            <p>기준가를 벗어난 상품과 판매건수 0건 상품은 Databricks Job이 같은 Kafka 토픽으로 발행만 하고, 예외 상품 반영은 예외처리 App이 소비해 처리하도록 나눴습니다. 집계 Job과 행사 설정 DB 쓰기가 분리돼 각자 독립적으로 운영할 수 있습니다.</p>
+            <p>제외 조건에 해당하는 상품은 Databricks Job이 Kafka 토픽으로 발행만 하고, 예외 상품 반영은 예외처리 App이 소비해 처리하도록 나눴습니다. 집계 Job과 행사 설정 DB 쓰기가 분리돼 각자 독립적으로 운영할 수 있습니다.</p>
           </li>
       </ul>
     </section>
@@ -97,7 +97,7 @@
         <div class="diagram-container">
 <svg viewBox="0 0 1280 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="event-promo-overview-title event-promo-overview-desc" style="min-width:1280px">
 <title id="event-promo-overview-title">이벤트 프로모션 아키텍처</title>
-<desc id="event-promo-overview-desc">관리자와 셀러가 행사 설정 DB에 쓴 데이터를 Databricks가 15분 주기로 집계해 기준가와 참여상품을 만들고, 기준가를 벗어난 상품과 판매건수 0건 상품은 같은 Kafka 토픽으로 발행해 예외처리 App이 소비·제외 처리하며, 참여상품을 이벤트 API와 쿠폰·검색 서비스로 싱크하는 구조를 영역별로 나눈 그림.</desc>
+<desc id="event-promo-overview-desc">관리자와 셀러가 행사 설정 DB에 쓴 데이터를 Databricks가 15분 주기로 집계해 기준가와 참여상품을 만들고, 기준가 이탈 등 제외 조건에 해당하는 상품은 Kafka 토픽으로 발행해 예외처리 App이 소비·제외 처리하며, 참여상품을 이벤트 API와 쿠폰·검색 서비스로 싱크하는 구조를 영역별로 나눈 그림.</desc>
 <defs>
 <marker id="event-promo-overview-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
 <marker id="event-promo-overview-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
@@ -175,7 +175,7 @@
 <path d="M 690,256 H 830 A 10,32 0 0 1 830,320 H 690 A 10,32 0 0 1 690,256 Z" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
 <ellipse cx="830" cy="288" rx="10" ry="32" fill="none" stroke="#4f5d75" stroke-width="1"/>
 <text x="754" y="286" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Kafka</text>
-<text x="754" y="302" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">off-price · 0 sales</text>
+<text x="754" y="302" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">exclude goods</text>
 <path d="M 864,168 A 80,8 0 0 1 1024,168 V 216 A 80,8 0 0 1 864,216 Z" fill="#f5f5f5"/>
 <path d="M 864,168 A 80,8 0 0 1 1024,168 V 216 A 80,8 0 0 1 864,216 Z" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
 <path d="M 864,168 A 80,8 0 0 0 1024,168" fill="none" stroke="#bf4520" stroke-width="1"/>
@@ -225,7 +225,7 @@
         </div>
         <a class="card-link arch-open" href="diagrams/event-promo-overview.html" target="_blank">다이어그램 크게 보기 →</a>
       </figure>
-      <p class="arch-note">관리자와 판매자가 행사 설정 DB에 행사·참여 신청 정보를 쓰면, Databricks가 15분 주기로 기준가를 산정하고 참여상품을 집계해 참여상품 DB와 Redis에 적재합니다. 기준가를 벗어난 상품과 판매건수 0건 상품은 같은 Kafka 토픽으로 발행되고, 예외처리 App이 이를 소비해 행사 설정 DB에 예외로 반영합니다. 이벤트 API는 참여상품을 장바구니·주문·상품 상세에 제공하고, 참여상품 DB는 쿠폰·검색 서비스로 싱크됩니다.</p>
+      <p class="arch-note">관리자와 판매자가 행사 설정 DB에 행사·참여 신청 정보를 쓰면, Databricks가 15분 주기로 기준가를 산정하고 참여상품을 집계해 참여상품 DB와 Redis에 적재합니다. 기준가 이탈 등 제외 조건에 해당하는 상품은 Kafka 토픽으로 발행되고, 예외처리 App이 이를 소비해 행사 설정 DB에 예외로 반영합니다. 이벤트 API는 참여상품을 장바구니·주문·상품 상세에 제공하고, 참여상품 DB는 쿠폰·검색 서비스로 싱크됩니다.</p>
     </section>
 
     <section class="section container other-projects">
