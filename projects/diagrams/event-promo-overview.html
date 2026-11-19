@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이벤트 프로모션 아키텍처</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Serif:ital@0;1&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Geist', 'Noto Sans KR', system-ui, sans-serif;
+      background: #f5f5f5; color: #2d3142; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', 'Noto Serif', 'Noto Serif KR', serif; font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 1280px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Swimlane · Event Promotion</p>
+    <h1>이벤트 프로모션 아키텍처</h1>
+    <div class="diagram-container">
+<svg viewBox="0 0 1280 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="event-promo-overview-title event-promo-overview-desc" style="min-width:1280px">
+<title id="event-promo-overview-title">이벤트 프로모션 아키텍처</title>
+<desc id="event-promo-overview-desc">관리자와 셀러가 행사 설정 DB에 쓴 데이터를 Databricks가 15분 주기로 집계해 기준가와 참여상품을 만들고, 기준가를 벗어난 상품은 예외 처리하며, 참여상품을 이벤트 API와 쿠폰·검색 서비스로 싱크하는 구조를 영역별로 나눈 그림.</desc>
+<defs>
+<marker id="event-promo-overview-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+<marker id="event-promo-overview-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+<pattern id="event-promo-overview-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="rgba(45,49,66,0.10)"/></pattern>
+</defs>
+<rect width="100%" height="100%" fill="#f5f5f5"/>
+<rect width="100%" height="100%" fill="url(#event-promo-overview-dots)" opacity="0.55"/>
+<!-- Zones -->
+<rect x="32" y="48" width="1216" height="96" fill="rgba(45,49,66,0.018)"/>
+<line x1="32" y1="48" x2="1248" y2="48" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+<text x="48" y="94" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ADMIN</text>
+<text x="48" y="110" fill="#5a6580" font-size="11" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">관리자</text>
+<line x1="32" y1="144" x2="1248" y2="144" stroke="rgba(45,49,66,0.1)" stroke-width="1"/>
+<text x="48" y="238" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ESM+</text>
+<text x="48" y="254" fill="#5a6580" font-size="11" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">셀러 · 행사 데이터</text>
+<rect x="32" y="336" width="1216" height="128" fill="rgba(45,49,66,0.018)"/>
+<line x1="32" y1="336" x2="1248" y2="336" stroke="rgba(45,49,66,0.1)" stroke-width="1"/>
+<text x="48" y="398" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">PRICE MONITORING</text>
+<text x="48" y="414" fill="#5a6580" font-size="11" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">가격 모니터링</text>
+<line x1="32" y1="464" x2="1248" y2="464" stroke="rgba(45,49,66,0.1)" stroke-width="1"/>
+<text x="48" y="526" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">SERVICES</text>
+<text x="48" y="542" fill="#5a6580" font-size="11" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">소비 서비스</text>
+<line x1="32" y1="592" x2="1248" y2="592" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+<line x1="176" y1="48" x2="176" y2="592" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+<!-- Arrows (drawn before nodes) -->
+<path d="M 496,128 V 160" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#event-promo-overview-arrow)"/>
+<path d="M 352,192 H 416" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#event-promo-overview-arrow)"/>
+<path d="M 496,224 V 368" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#event-promo-overview-arrow)"/>
+<path d="M 576,400 H 680" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#event-promo-overview-arrow)"/>
+<path d="M 760,368 V 224" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#event-promo-overview-arrow-link)"/>
+<path d="M 680,192 H 576" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#event-promo-overview-arrow)"/>
+<path d="M 528,432 V 440 Q 528,448 536,448 H 896 Q 904,448 904,440 V 320" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#event-promo-overview-arrow)"/>
+<path d="M 968,320 V 496" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#event-promo-overview-arrow-link)"/>
+<path d="M 1024,288 H 1160 Q 1168,288 1168,296 V 496" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#event-promo-overview-arrow-link)"/>
+<!-- Arrow labels -->
+<rect x="364" y="172" width="40" height="12" rx="2" fill="#f5f5f5"/>
+<text x="384" y="181" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">APPLY</text>
+<rect x="504" y="282" width="40" height="12" rx="2" fill="#f5f5f5"/>
+<text x="524" y="291" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">15MIN</text>
+<rect x="594" y="380" width="68" height="12" rx="2" fill="#f5f5f5"/>
+<text x="628" y="389" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BASE PRICE</text>
+<rect x="768" y="290" width="64" height="12" rx="2" fill="#f5f5f5"/>
+<text x="800" y="299" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">OFF PRICE</text>
+<rect x="602" y="172" width="52" height="12" rx="2" fill="#f5f5f5"/>
+<text x="628" y="181" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">EXCLUDE</text>
+<rect x="610" y="428" width="36" height="12" rx="2" fill="#f5f5f5"/>
+<text x="628" y="437" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BULK</text>
+<rect x="1074" y="268" width="36" height="12" rx="2" fill="#f5f5f5"/>
+<text x="1092" y="277" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SYNC</text>
+<!-- Nodes -->
+<rect x="416" y="64" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="416" y="64" width="160" height="64" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+<rect x="424" y="72" width="40" height="12" rx="2" fill="transparent" stroke="rgba(90,101,128,0.40)" stroke-width="0.8"/>
+<text x="444" y="81" fill="#5a6580" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ADMIN</text>
+<text x="496" y="100" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">행사 설정</text>
+<text x="496" y="116" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">schedule · seller · exclude</text>
+<rect x="192" y="160" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="192" y="160" width="160" height="64" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+<rect x="200" y="168" width="44" height="12" rx="2" fill="transparent" stroke="rgba(90,101,128,0.40)" stroke-width="0.8"/>
+<text x="222" y="177" fill="#5a6580" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SELLER</text>
+<text x="272" y="196" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">참여 신청</text>
+<text x="272" y="212" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">join · exclude request</text>
+<rect x="416" y="160" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="416" y="160" width="160" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+<rect x="424" y="168" width="28" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+<text x="438" y="177" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">RDB</text>
+<text x="496" y="196" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">행사 설정 DB</text>
+<text x="496" y="212" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">event · seller · exclude</text>
+<rect x="680" y="160" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="680" y="160" width="160" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<rect x="688" y="168" width="28" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+<text x="702" y="177" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">APP</text>
+<text x="760" y="196" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">예외처리 App</text>
+<text x="760" y="212" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">Kafka consumer</text>
+<rect x="864" y="256" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="864" y="256" width="160" height="64" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+<rect x="872" y="264" width="28" height="12" rx="2" fill="transparent" stroke="rgba(191,69,32,0.50)" stroke-width="0.8"/>
+<text x="886" y="273" fill="#bf4520" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">RDB</text>
+<text x="944" y="292" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">참여상품 DB · Redis</text>
+<text x="944" y="308" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">included goods</text>
+<rect x="416" y="368" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="416" y="368" width="160" height="64" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+<rect x="424" y="376" width="40" height="12" rx="2" fill="transparent" stroke="rgba(191,69,32,0.50)" stroke-width="0.8"/>
+<text x="444" y="385" fill="#bf4520" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SPARK</text>
+<text x="496" y="404" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Databricks</text>
+<text x="496" y="420" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">base price · 15min job</text>
+<rect x="680" y="368" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="680" y="368" width="160" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+<rect x="688" y="376" width="44" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+<text x="710" y="385" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SEARCH</text>
+<text x="760" y="404" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Elasticsearch</text>
+<text x="760" y="420" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">base price · sales</text>
+<rect x="864" y="496" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="864" y="496" width="160" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<rect x="872" y="504" width="28" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+<text x="886" y="513" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">API</text>
+<text x="944" y="532" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">이벤트 API</text>
+<text x="944" y="548" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">cart · order · item page</text>
+<rect x="1088" y="496" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="1088" y="496" width="160" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<rect x="1096" y="504" width="28" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+<text x="1110" y="513" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SVC</text>
+<text x="1168" y="532" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">쿠폰 · 검색 서비스</text>
+<text x="1168" y="548" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">coupon · search sync</text>
+<line x1="32" y1="616" x2="1248" y2="616" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+<text x="32" y="636" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+<rect x="32" y="650" width="14" height="10" rx="2" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+<text x="52" y="660" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">핵심 컴포넌트</text>
+<rect x="160" y="650" width="14" height="10" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="180" y="660" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">서비스</text>
+<rect x="244" y="650" width="14" height="10" rx="2" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+<text x="264" y="660" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">저장소</text>
+<rect x="328" y="650" width="14" height="10" rx="2" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+<text x="348" y="660" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">사용자</text>
+<line x1="412" y1="655" x2="440" y2="655" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#event-promo-overview-arrow)"/>
+<text x="448" y="660" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">실시간 write</text>
+<line x1="560" y1="655" x2="588" y2="655" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#event-promo-overview-arrow)"/>
+<text x="596" y="660" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">배치 write</text>
+<line x1="696" y1="655" x2="724" y2="655" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#event-promo-overview-arrow-link)"/>
+<text x="732" y="660" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">조회 · 싱크</text>
+</svg>
+    </div>
+  </div>
+</body>
+</html>

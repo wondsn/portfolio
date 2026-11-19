@@ -72,3 +72,6 @@ p.placeholder { margin: 8px 0 0; }
 .arch .diagram-container svg { width: 100%; min-width: 1280px; display: block; }
 .arch .arch-open { display: inline-block; margin-top: 12px; }
 .arch:has(.diagram-container) figcaption { max-width: 1040px; }
+.arch + .arch { margin-top: 48px; }
+.arch .arch-title { font-size: 16px; margin-bottom: 12px; }
+.arch-note { max-width: 1040px; margin-top: 24px; }

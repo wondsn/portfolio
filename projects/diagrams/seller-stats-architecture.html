@@ -61,7 +61,7 @@
     <div class="diagram-container">
       <svg viewBox="0 0 1280 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="seller-stats-architecture-title seller-stats-architecture-desc">
         <title id="seller-stats-architecture-title">판매자센터 통계 서비스 아키텍처</title>
-        <desc id="seller-stats-architecture-desc">페이지뷰 스트림과 원천 DB 데이터를 Databricks에서 집계해 Elasticsearch와 ESMPLUSDB에 적재하고, 통계 BE가 이를 조회해 통계 FE와 ESM+ 타 도메인에 제공하는 구조.</desc>
+        <desc id="seller-stats-architecture-desc">페이지뷰 스트림과 원천 DB 데이터를 Databricks에서 집계해 Elasticsearch와 통계 DB에 적재하고, 통계 BE가 이를 조회해 통계 FE와 ESM+ 타 도메인에 제공하는 구조.</desc>
         <defs>
           <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
           <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
@@ -87,15 +87,15 @@
         <path d="M 216,208 H 396 Q 404,208 404,216 V 304" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
         <!-- Source DB -> Databricks : delayed write (D-1 table load) -->
         <path d="M 216,452 H 396 Q 404,452 404,444 V 368" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
-        <!-- Source DB -> ESMPLUSDB : realtime sync -->
+        <!-- Source DB -> Stats DB : realtime sync -->
         <line x1="216" y1="476" x2="576" y2="476" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
         <!-- Databricks -> Elasticsearch : delayed write (daily / weekly / monthly) -->
         <path d="M 488,324 H 524 Q 532,324 532,316 V 216 Q 532,208 540,208 H 576" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
-        <!-- Databricks -> ESMPLUSDB : delayed write (hourly) -->
+        <!-- Databricks -> Stats DB : delayed write (hourly) -->
         <path d="M 488,348 H 524 Q 532,348 532,356 V 444 Q 532,452 540,452 H 576" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
         <!-- Elasticsearch -> Stats BE : realtime read -->
         <path d="M 744,208 H 896 Q 904,208 904,216 V 304" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
-        <!-- ESMPLUSDB -> Stats BE : realtime read (today) -->
+        <!-- Stats DB -> Stats BE : realtime read (today) -->
         <path d="M 744,464 H 896 Q 904,464 904,456 V 368" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
         <!-- Stats FE <-> Stats BE : API -->
         <path d="M 1100,240 V 312 Q 1100,320 1092,320 H 1016" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-start="url(#arrow-link)" marker-end="url(#arrow-link)"/>
@@ -129,7 +129,7 @@
         <rect x="56" y="184" width="40" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
         <text x="76" y="193" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">STREAM</text>
         <text x="132" y="212" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Kafka</text>
-        <text x="132" y="228" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">UTS · app/web view</text>
+        <text x="132" y="228" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">app · web view log</text>
 
         <!-- Node: Source DB (store) -->
         <rect x="48" y="432" width="168" height="64" rx="6" fill="#f5f5f5"/>
@@ -137,7 +137,7 @@
         <rect x="56" y="440" width="24" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
         <text x="68" y="449" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
         <text x="132" y="468" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">원천 DB</text>
-        <text x="132" y="484" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">GMKT · IAC core/sync</text>
+        <text x="132" y="484" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">core · sync</text>
 
         <!-- Node: Databricks (focal) -->
         <rect x="320" y="304" width="168" height="64" rx="6" fill="#f5f5f5"/>
@@ -145,7 +145,7 @@
         <rect x="328" y="312" width="28" height="12" rx="2" fill="transparent" stroke="rgba(191,69,32,0.50)" stroke-width="0.8"/>
         <text x="342" y="321" fill="#bf4520" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AGG</text>
         <text x="404" y="340" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Databricks</text>
-        <text x="404" y="356" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">Spark · BAIKAL X</text>
+        <text x="404" y="356" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">Spark · batch</text>
 
         <!-- Node: Elasticsearch (store) -->
         <rect x="576" y="176" width="168" height="64" rx="6" fill="#f5f5f5"/>
@@ -153,14 +153,14 @@
         <rect x="584" y="184" width="40" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
         <text x="604" y="193" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SEARCH</text>
         <text x="660" y="212" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Elasticsearch</text>
-        <text x="660" y="228" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">SMTES · trend · TOP 50</text>
+        <text x="660" y="228" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">trend · TOP 50</text>
 
-        <!-- Node: ESMPLUSDB (store) -->
+        <!-- Node: Stats DB (store) -->
         <rect x="576" y="432" width="168" height="64" rx="6" fill="#f5f5f5"/>
         <rect x="576" y="432" width="168" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
         <rect x="584" y="440" width="28" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
         <text x="598" y="449" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">RDB</text>
-        <text x="660" y="468" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">ESMPLUSDB</text>
+        <text x="660" y="468" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">통계 DB</text>
         <text x="660" y="484" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">today · hourly stats</text>
 
         <!-- Node: Stats BE (focal) -->
@@ -177,7 +177,7 @@
         <rect x="1072" y="184" width="28" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
         <text x="1086" y="193" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">WEB</text>
         <text x="1148" y="212" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">통계 FE</text>
-        <text x="1148" y="228" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">selling-insight.esmplus.com</text>
+        <text x="1148" y="228" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">web app</text>
 
         <!-- Node: Seller (input) -->
         <rect x="1064" y="56" width="168" height="64" rx="6" fill="#f5f5f5"/>
