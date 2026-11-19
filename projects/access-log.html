@@ -99,7 +99,7 @@
         <div class="diagram-container">
 <svg viewBox="0 0 1280 584" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="access-log-architecture-title access-log-architecture-desc" style="min-width:1280px">
 <title id="access-log-architecture-title">판매자 개인정보 접속기록 아키텍처</title>
-<desc id="access-log-architecture-desc">ESM+ 서버가 남긴 개인정보 접속기록을 Producer가 파싱하고 IP를 암호화해 Kafka로 보내고, Consumer가 DB에 저장하며, 접속기록 API가 판매자 조회와 관리자 메뉴 관리를 처리하는 구조.</desc>
+<desc id="access-log-architecture-desc">ESM+ 서버가 남긴 개인정보 접속기록을 Producer가 파싱하고 IP를 암호화해 Kafka로 보내고, Consumer가 접속기록 DB와 MongoDB에 저장하며, 접속기록 API가 판매자 조회와 관리자 메뉴 관리를 처리하는 구조.</desc>
 <defs>
 <marker id="access-log-architecture-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
 <marker id="access-log-architecture-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
@@ -131,7 +131,7 @@
 <path d="M 368,288 H 416" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow)"/>
 <path d="M 576,288 H 624" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow)"/>
 <path d="M 704,320 V 368" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow)"/>
-<path d="M 288,320 V 392 Q 288,400 296,400 H 416" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow)"/>
+<path d="M 624,304 H 608 Q 600,304 600,312 V 392 Q 600,400 592,400 H 576" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow)"/>
 <path d="M 368,192 H 864 Q 872,192 872,200 V 256" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow-link)"/>
 <path d="M 1120,224 V 280 Q 1120,288 1112,288 H 992" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow-link)"/>
 <path d="M 884,320 V 392 Q 884,400 876,400 H 784" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow-link)"/>
@@ -139,8 +139,8 @@
 <!-- Arrow labels -->
 <rect x="296" y="234" width="32" height="12" rx="2" fill="#f5f5f5"/>
 <text x="312" y="243" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LOG</text>
-<rect x="312" y="380" width="88" height="12" rx="2" fill="#f5f5f5"/>
-<text x="356" y="389" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LARGE ID LIST</text>
+<rect x="504" y="346" width="88" height="12" rx="2" fill="#f5f5f5"/>
+<text x="548" y="355" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LARGE ID LIST</text>
 <rect x="584" y="172" width="64" height="12" rx="2" fill="#f5f5f5"/>
 <text x="616" y="181" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LOG QUERY</text>
 <rect x="1034" y="268" width="36" height="12" rx="2" fill="#f5f5f5"/>
