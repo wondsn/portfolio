@@ -75,3 +75,10 @@ p.placeholder { margin: 8px 0 0; }
 .arch + .arch { margin-top: 48px; }
 .arch .arch-title { font-size: 16px; margin-bottom: 12px; }
 .arch-note { max-width: 1040px; margin-top: 24px; }
+.star-list { margin: 8px 0 0; padding-left: 18px; }
+.star-list li + li { margin-top: 4px; }
+.star-item p { margin: 8px 0 0; }
+.metrics.four { grid-template-columns: repeat(4, 1fr); }
+.metrics dd { font-size: 30px; }
+.decision-list a { color: var(--accent); }
+@media (max-width: 760px) { .metrics.four { grid-template-columns: repeat(2, 1fr); } }

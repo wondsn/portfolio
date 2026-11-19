@@ -20,7 +20,6 @@
         <a href="#overview">개요</a>
         <a href="#tech">기술 결정</a>
         <a href="#architecture">아키텍처</a>
-        <a href="#troubleshooting">트러블 슈팅</a>
       </nav>
     </div>
   </header>
@@ -30,12 +29,12 @@
       <a class="back" href="../index.html#projects">← 프로젝트 목록</a>
       <p class="eyebrow">지마켓 · 2023.02 — 2024.12</p>
       <h1>판매자센터 통계 서비스 런칭 및 고도화</h1>
-      <p class="placeholder">프로젝트를 한두 문장으로 소개하세요. 누구를 위한 무엇인지, 왜 필요했는지.</p>
+      <p class="lead">판매 데이터를 활용해 판매자가 스스로 판매 촉진 기회를 분석하고 실행할 수 있도록 만든 판매자센터(ESM+) 통계 서비스입니다. 데이터 집계 파이프라인부터 조회 API, 대용량 엑셀 다운로드, 화면까지 새로 구축했습니다.</p>
       <dl class="meta">
         <div><dt>기간</dt><dd>2023.02 — 2024.12</dd></div>
         <div><dt>소속</dt><dd>지마켓</dd></div>
-        <div><dt>역할</dt><dd class="placeholder">역할 (예: 백엔드 개발, 파트 리드)</dd></div>
-        <div><dt>팀 구성</dt><dd class="placeholder">예: BE 3명, FE 2명</dd></div>
+        <div><dt>역할</dt><dd>파트 리드 · 데이터 서빙 · FE</dd></div>
+        <div><dt>팀 구성</dt><dd>BE 1 · FE 1 · 데이터 2</dd></div>
       </dl>
       <div class="tags"><span>Next.js</span><span>React</span><span>TypeScript</span><span>Kotlin</span><span>Spring Boot</span><span>Elasticsearch</span><span>Node.js</span><span>Databricks</span></div>
     </section>
@@ -46,32 +45,34 @@
           <div class="star-item">
             <span class="star-key">S</span>
             <h3>Situation · 상황</h3>
-            <p class="placeholder">어떤 배경과 문제가 있었는지 작성하세요. (예: 기존 시스템의 한계, 비즈니스 요구사항)</p>
+            <p>판매자가 자신의 판매·유입 데이터를 직접 분석해 판매 촉진 기회를 찾고 실행할 수 있도록, 판매자센터(ESM+)에 통계 서비스를 새로 만드는 프로젝트였습니다.</p>
           </div>
           <div class="star-item">
             <span class="star-key">T</span>
             <h3>Task · 과제</h3>
-            <p class="placeholder">해결해야 했던 목표와 나의 역할·책임 범위를 작성하세요.</p>
+            <p>파트 리드로 BE·FE·데이터 엔지니어로 구성된 팀을 이끌며 다음을 맡았습니다.</p>
+            <ul class="star-list"><li>판매·유입 데이터 집계 및 데이터 서빙</li><li>대용량 엑셀 다운로드 아키텍처 설계</li><li>요약·리뷰 현황·인기 카테고리 화면 개발</li></ul>
           </div>
           <div class="star-item">
             <span class="star-key">A</span>
             <h3>Action · 행동</h3>
-            <p class="placeholder">목표를 위해 무엇을, 어떻게 했는지 작성하세요. (설계, 구현, 협업)</p>
+            <ul class="star-list"><li>Databricks(Spark)로 판매·유입 데이터를 집계하는 파이프라인 구축</li><li>조회 패턴에 맞춰 일·주·월 트렌드는 Elasticsearch, 시간 단위·오늘 통계는 RDB로 저장소 분리</li><li>대용량 엑셀은 exceljs 스트리밍 기반 Node.js 파일 서버로 분리</li><li>Next.js·React로 요약, 리뷰 현황, 인기 카테고리 화면 개발</li></ul>
           </div>
           <div class="star-item">
             <span class="star-key">R</span>
             <h3>Result · 결과</h3>
-            <p class="placeholder">결과를 가능한 한 구체적인 수치로 작성하세요. (예: 처리 시간 N초 → M초)</p>
+            <ul class="star-list"><li>하루 3억 건의 데이터를 2시간 안에 집계</li><li>통계 조회 p95 20ms</li><li>최대 100만 행 엑셀 다운로드를 타임아웃 없이 제공</li><li>월 이용 판매자 1.22만 명, 월 PV 30만 건</li></ul>
           </div>
       </div>
     </section>
 
     <section id="metrics" class="section container">
       <h2 class="section-title"><span>02</span> 핵심 성과</h2>
-      <dl class="stats metrics">
-          <div><dt class="placeholder-title">지표 이름</dt><dd class="placeholder-title">—</dd><p class="placeholder">개선 전 → 개선 후</p></div>
-          <div><dt class="placeholder-title">지표 이름</dt><dd class="placeholder-title">—</dd><p class="placeholder">개선 전 → 개선 후</p></div>
-          <div><dt class="placeholder-title">지표 이름</dt><dd class="placeholder-title">—</dd><p class="placeholder">개선 전 → 개선 후</p></div>
+      <dl class="stats metrics four">
+          <div><dt>일일 집계 데이터</dt><dd>3억<span>건</span></dd><p>2시간 내 집계 완료</p></div>
+          <div><dt>통계 조회 응답 (p95)</dt><dd>20<span>ms</span></dd><p>Elasticsearch · RDB 조회 기준</p></div>
+          <div><dt>엑셀 다운로드</dt><dd>100만<span>행</span></dd><p>스트리밍으로 타임아웃 0건</p></div>
+          <div><dt>월 이용 판매자</dt><dd>1.22만<span>명</span></dd><p>월 PV 30만 건</p></div>
       </dl>
     </section>
 
@@ -79,16 +80,16 @@
       <h2 class="section-title"><span>03</span> 핵심 기술 및 기술 의사결정</h2>
       <ul class="decision-list">
           <li>
-            <h3 class="placeholder-title">기술 / 결정 1</h3>
-            <p class="placeholder">왜 이 기술(방식)을 선택했는지, 어떤 대안과 비교했는지 작성하세요.</p>
+            <h3>저장소 분리: RDB + Elasticsearch</h3>
+            <p>인프라 운영 비용을 고려해 별도 저장소를 새로 도입하지 않고, 이미 운영 중인 Elasticsearch 클러스터를 활용했습니다. 일·주·월 트렌드, 키워드, TOP 50처럼 기간·카테고리별 집계와 검색이 많은 조회는 Elasticsearch에 잘 맞는 패턴이었습니다. 반대로 Elasticsearch는 문서를 자주 부분 수정하면 재색인 비용이 커서, 준실시간으로 갱신되는 시간 단위·오늘 통계는 RDB로 분리해 약점을 보완했습니다.</p>
           </li>
           <li>
-            <h3 class="placeholder-title">기술 / 결정 2</h3>
-            <p class="placeholder">왜 이 기술(방식)을 선택했는지, 어떤 대안과 비교했는지 작성하세요.</p>
+            <h3>엑셀 다운로드: Node.js + exceljs 스트리밍 파일 서버</h3>
+            <p>최대 100만 행의 엑셀을 서버 메모리에 한꺼번에 올리지 않고, 행 단위로 생성해 바로 응답으로 흘려보내도록 exceljs의 스트리밍 writer를 사용했습니다(<a href="https://d2.naver.com/helloworld/9423440" target="_blank" rel="noopener">네이버 D2 사례</a> 참고). 무거운 다운로드 트래픽이 통계 API에 영향을 주지 않도록 별도 Node.js 파일 서버로 분리했습니다.</p>
           </li>
           <li>
-            <h3 class="placeholder-title">기술 / 결정 3</h3>
-            <p class="placeholder">왜 이 기술(방식)을 선택했는지, 어떤 대안과 비교했는지 작성하세요.</p>
+            <h3>집계 플랫폼: Databricks</h3>
+            <p>Spark로 대량 집계 시간을 줄일 수 있고, Job 스케줄링·모니터링 같은 운영 기능이 내장돼 있으며, 클러스터를 직접 운영하지 않는 관리형 레이크하우스 플랫폼이라 인프라 부담이 적어 Databricks를 사용했습니다.</p>
           </li>
       </ul>
     </section>
@@ -224,18 +225,7 @@
         </div>
         <a class="card-link arch-open" href="diagrams/seller-stats-architecture.html" target="_blank">다이어그램 크게 보기 →</a>
       </figure>
-      <p class="placeholder arch-note">데이터·요청 흐름과 각 구성요소의 역할을 설명하세요.</p>
-    </section>
-
-    <section id="troubleshooting" class="section container">
-      <h2 class="section-title"><span>05</span> 트러블 슈팅</h2>
-      <article class="trouble">
-        <h3 class="placeholder-title">트러블 슈팅 제목</h3>
-        <div class="trouble-step"><h4>문제 상황</h4><p class="placeholder">어떤 문제가, 어떻게 발견되었는지 작성하세요. (사용자 관점, 수치)</p></div>
-        <div class="trouble-step"><h4>원인 분석</h4><p class="placeholder">원인을 파악하기 위해 어떤 접근을 했는지 작성하세요.</p></div>
-        <div class="trouble-step"><h4>해결 방법</h4><p class="placeholder">검토한 대안들과 최종 선택한 해결책, 그 이유를 작성하세요.</p></div>
-        <div class="trouble-step"><h4>결과</h4><p class="placeholder">개선 결과를 구체적인 수치로 작성하세요.</p></div>
-      </article>
+      <p class="arch-note">Kafka로 들어오는 앱·웹 페이지뷰 로그와 원천 DB 데이터를 Databricks에서 집계합니다. 일·주·월 트렌드와 키워드·TOP 50 데이터는 Elasticsearch에, 시간 단위 통계는 통계 DB에 적재하고, 오늘 데이터는 원천 DB에서 통계 DB로 실시간 동기화합니다. 통계 BE가 두 저장소를 조회해 통계 FE와 ESM+ 다른 도메인에 API로 제공합니다.</p>
     </section>
 
     <section class="section container other-projects">
