@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>판매자 개인정보 접속기록 아키텍처</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Serif:ital@0;1&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Geist', 'Noto Sans KR', system-ui, sans-serif;
+      background: #f5f5f5; color: #2d3142; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', 'Noto Serif', 'Noto Serif KR', serif; font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 1280px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Swimlane · Access Log</p>
+    <h1>판매자 개인정보 접속기록 아키텍처</h1>
+    <div class="diagram-container">
+<svg viewBox="0 0 1280 584" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="access-log-architecture-title access-log-architecture-desc" style="min-width:1280px">
+<title id="access-log-architecture-title">판매자 개인정보 접속기록 아키텍처</title>
+<desc id="access-log-architecture-desc">ESM+ 서버가 남긴 개인정보 접속기록을 Producer가 파싱하고 IP를 암호화해 Kafka로 보내고, Consumer가 DB에 저장하며, 접속기록 API가 판매자 조회와 관리자 메뉴 관리를 처리하는 구조.</desc>
+<defs>
+<marker id="access-log-architecture-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+<marker id="access-log-architecture-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+<pattern id="access-log-architecture-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="rgba(45,49,66,0.10)"/></pattern>
+</defs>
+<rect width="100%" height="100%" fill="#f5f5f5"/>
+<rect width="100%" height="100%" fill="url(#access-log-architecture-dots)" opacity="0.55"/>
+<!-- Zones -->
+<rect x="32" y="48" width="1216" height="96" fill="rgba(45,49,66,0.018)"/>
+<line x1="32" y1="48" x2="1248" y2="48" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+<text x="48" y="94" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">USER</text>
+<text x="48" y="110" fill="#5a6580" font-size="11" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">사용자</text>
+<line x1="32" y1="144" x2="1248" y2="144" stroke="rgba(45,49,66,0.1)" stroke-width="1"/>
+<text x="48" y="190" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">SERVICE</text>
+<text x="48" y="206" fill="#5a6580" font-size="11" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">서비스 화면</text>
+<rect x="32" y="240" width="1216" height="96" fill="rgba(45,49,66,0.018)"/>
+<line x1="32" y1="240" x2="1248" y2="240" stroke="rgba(45,49,66,0.1)" stroke-width="1"/>
+<text x="48" y="286" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ACCESS LOG</text>
+<text x="48" y="302" fill="#5a6580" font-size="11" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">접속기록 시스템</text>
+<line x1="32" y1="336" x2="1248" y2="336" stroke="rgba(45,49,66,0.1)" stroke-width="1"/>
+<text x="48" y="414" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">DATABASE</text>
+<text x="48" y="430" fill="#5a6580" font-size="11" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">저장소</text>
+<line x1="32" y1="496" x2="1248" y2="496" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+<line x1="176" y1="48" x2="176" y2="496" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+<!-- Arrows (drawn before nodes) -->
+<path d="M 288,128 V 160" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow-link)"/>
+<path d="M 1120,128 V 160" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow-link)"/>
+<path d="M 288,224 V 256" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow)"/>
+<path d="M 368,288 H 416" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow)"/>
+<path d="M 576,288 H 624" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow)"/>
+<path d="M 704,320 V 368" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow)"/>
+<path d="M 288,320 V 392 Q 288,400 296,400 H 416" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow)"/>
+<path d="M 368,192 H 864 Q 872,192 872,200 V 256" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow-link)"/>
+<path d="M 1120,224 V 280 Q 1120,288 1112,288 H 992" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow-link)"/>
+<path d="M 884,320 V 392 Q 884,400 876,400 H 784" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow-link)"/>
+<path d="M 940,320 V 464 Q 940,472 932,472 H 504 Q 496,472 496,464 V 432" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow-link)"/>
+<!-- Arrow labels -->
+<rect x="296" y="234" width="32" height="12" rx="2" fill="#f5f5f5"/>
+<text x="312" y="243" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LOG</text>
+<rect x="312" y="380" width="88" height="12" rx="2" fill="#f5f5f5"/>
+<text x="356" y="389" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LARGE ID LIST</text>
+<rect x="584" y="172" width="64" height="12" rx="2" fill="#f5f5f5"/>
+<text x="616" y="181" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LOG QUERY</text>
+<rect x="1034" y="268" width="36" height="12" rx="2" fill="#f5f5f5"/>
+<text x="1052" y="277" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MENU</text>
+<!-- Nodes -->
+<rect x="208" y="64" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="208" y="64" width="160" height="64" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+<g transform="translate(220,84) scale(1)" fill="none" stroke="#5a6580" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /> <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></g>
+<text x="304" y="94" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">판매자</text>
+<text x="304" y="110" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">seller</text>
+<rect x="1040" y="64" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="1040" y="64" width="160" height="64" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+<g transform="translate(1052,84) scale(1)" fill="none" stroke="#5a6580" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21v-2a4 4 0 0 1 4 -4h2" /> <path d="M22 16c0 4 -2.5 6 -3.5 6s-3.5 -2 -3.5 -6c1 0 2.5 -.5 3.5 -1.5c1 1 2.5 1.5 3.5 1.5" /> <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /></g>
+<text x="1136" y="94" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">관리자</text>
+<text x="1136" y="110" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">admin</text>
+<rect x="208" y="160" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="208" y="160" width="160" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<g transform="translate(220,180) scale(1)" fill="none" stroke="#2d3142" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /> <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /> <path d="M7 8l0 .01" /> <path d="M7 16l0 .01" /></g>
+<text x="304" y="190" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">ESM+ 서버</text>
+<text x="304" y="206" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">logic · log menu</text>
+<rect x="1040" y="160" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="1040" y="160" width="160" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<g transform="translate(1052,180) scale(1)" fill="none" stroke="#2d3142" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /> <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /> <path d="M7 8l0 .01" /> <path d="M7 16l0 .01" /></g>
+<text x="1136" y="190" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">관리자 백오피스</text>
+<text x="1136" y="206" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">privacy menu</text>
+<rect x="208" y="256" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="208" y="256" width="160" height="64" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+<g transform="translate(220,276) scale(1)" fill="none" stroke="#bf4520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /> <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /> <path d="M7 8l0 .01" /> <path d="M7 16l0 .01" /></g>
+<text x="304" y="286" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Producer</text>
+<text x="304" y="302" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">parse · IP encrypt</text>
+<path d="M 426,256 H 566 A 10,32 0 0 1 566,320 H 426 A 10,32 0 0 1 426,256 Z" fill="#f5f5f5"/>
+<path d="M 426,256 H 566 A 10,32 0 0 1 566,320 H 426 A 10,32 0 0 1 426,256 Z" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+<ellipse cx="566" cy="288" rx="10" ry="32" fill="none" stroke="#4f5d75" stroke-width="1"/>
+<text x="490" y="286" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Kafka</text>
+<text x="490" y="302" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">access log topic</text>
+<rect x="624" y="256" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="624" y="256" width="160" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<g transform="translate(636,276) scale(1)" fill="none" stroke="#2d3142" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /> <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /> <path d="M7 8l0 .01" /> <path d="M7 16l0 .01" /></g>
+<text x="720" y="286" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Consumer</text>
+<text x="720" y="302" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">topic consuming</text>
+<rect x="832" y="256" width="160" height="64" rx="6" fill="#f5f5f5"/>
+<rect x="832" y="256" width="160" height="64" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+<g transform="translate(844,276) scale(1)" fill="none" stroke="#bf4520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /> <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /> <path d="M7 8l0 .01" /> <path d="M7 16l0 .01" /></g>
+<text x="928" y="286" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">접속기록 API</text>
+<text x="928" y="302" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">query · excel · menu</text>
+<path d="M 416,376 A 80,8 0 0 1 576,376 V 424 A 80,8 0 0 1 416,424 Z" fill="#f5f5f5"/>
+<path d="M 416,376 A 80,8 0 0 1 576,376 V 424 A 80,8 0 0 1 416,424 Z" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+<path d="M 416,376 A 80,8 0 0 0 576,376" fill="none" stroke="#4f5d75" stroke-width="1"/>
+<text x="496" y="406" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">MongoDB</text>
+<text x="496" y="420" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">large ID lists</text>
+<path d="M 624,376 A 80,8 0 0 1 784,376 V 424 A 80,8 0 0 1 624,424 Z" fill="#f5f5f5"/>
+<path d="M 624,376 A 80,8 0 0 1 784,376 V 424 A 80,8 0 0 1 624,424 Z" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+<path d="M 624,376 A 80,8 0 0 0 784,376" fill="none" stroke="#4f5d75" stroke-width="1"/>
+<text x="704" y="406" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">접속기록 DB</text>
+<text x="704" y="420" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">RDB · access log</text>
+<line x1="32" y1="520" x2="1248" y2="520" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+<text x="32" y="540" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+<g transform="translate(32,549) scale(0.75)" fill="none" stroke="#2d3142" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /> <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /> <path d="M7 8l0 .01" /> <path d="M7 16l0 .01" /></g>
+<text x="56" y="564" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">서버</text>
+<rect x="108" y="552" width="14" height="12" rx="2" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+<text x="128" y="564" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">핵심 서버</text>
+<path d="M 216,553 H 232 A 4,6 0 0 1 232,565 H 216 A 4,6 0 0 1 216,553 Z" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/><ellipse cx="232" cy="559" rx="4" ry="6" fill="none" stroke="#4f5d75" stroke-width="1"/>
+<text x="242" y="564" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">메시지 큐 (Kafka)</text>
+<path d="M 388,554 A 7,3 0 0 1 402,554 V 564 A 7,3 0 0 1 388,564 Z" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/><path d="M 388,554 A 7,3 0 0 0 402,554" fill="none" stroke="#4f5d75" stroke-width="1"/>
+<text x="410" y="564" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">데이터베이스</text>
+<g transform="translate(512,549) scale(0.75)" fill="none" stroke="#2d3142" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /> <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></g>
+<text x="536" y="564" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">사용자</text>
+<line x1="600" y1="559" x2="628" y2="559" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow)"/>
+<text x="636" y="564" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">기록 write</text>
+<line x1="736" y1="559" x2="764" y2="559" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#access-log-architecture-arrow-link)"/>
+<text x="772" y="564" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">조회 · 요청</text>
+</svg>
+    </div>
+  </div>
+</body>
+</html>
