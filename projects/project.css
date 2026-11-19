@@ -82,3 +82,4 @@ p.placeholder { margin: 8px 0 0; }
 .metrics dd { font-size: 30px; }
 .decision-list a { color: var(--accent); }
 @media (max-width: 760px) { .metrics.four { grid-template-columns: repeat(2, 1fr); } }
+.arch-note + .arch { margin-top: 56px; }

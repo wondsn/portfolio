@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엑셀 생성 시퀀스</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Serif:ital@0;1&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Geist', 'Noto Sans KR', system-ui, sans-serif;
+      background: #f5f5f5; color: #2d3142; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', 'Noto Serif', 'Noto Serif KR', serif; font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 1280px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sequence · Excel Download</p>
+    <h1>엑셀 생성 시퀀스</h1>
+    <div class="diagram-container">
+<svg viewBox="0 0 1280 672" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="seller-stats-excel-sequence-title seller-stats-excel-sequence-desc" style="min-width:1280px">
+<title id="seller-stats-excel-sequence-title">엑셀 생성 시퀀스</title>
+<desc id="seller-stats-excel-sequence-desc">엑셀 서버가 기간 데이터는 Elasticsearch에서 10,000건씩, 오늘 데이터는 통계 BE에서 100건씩 가져와 엑셀 행을 만들고, 만드는 즉시 스트림으로 통계 FE에 내려주는 과정.</desc>
+<defs>
+<marker id="seller-stats-excel-sequence-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+<marker id="seller-stats-excel-sequence-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+<pattern id="seller-stats-excel-sequence-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="rgba(45,49,66,0.10)"/></pattern>
+</defs>
+<rect width="100%" height="100%" fill="#f5f5f5"/>
+<rect width="100%" height="100%" fill="url(#seller-stats-excel-sequence-dots)" opacity="0.55"/>
+<!-- Zones -->
+<line x1="200" y1="112" x2="200" y2="592" stroke="rgba(45,49,66,0.22)" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="480" y1="112" x2="480" y2="592" stroke="rgba(45,49,66,0.22)" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="760" y1="112" x2="760" y2="592" stroke="rgba(45,49,66,0.22)" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="1040" y1="112" x2="1040" y2="592" stroke="rgba(45,49,66,0.22)" stroke-width="1" stroke-dasharray="3,3"/>
+<rect x="152" y="184" width="936" height="376" rx="4" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+<rect x="152" y="184" width="40" height="16" rx="2" fill="#f5f5f5" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+<text x="172" y="196" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">ALT</text>
+<text x="204" y="196" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">[기간 데이터 · 끝까지 반복]</text>
+<line x1="160" y1="376" x2="1080" y2="376" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="164" y="396" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">[오늘 데이터 · 끝까지 반복]</text>
+<rect x="196" y="140" width="8" height="444" fill="rgba(45,49,66,0.06)" stroke="#4f5d75" stroke-width="0.8"/>
+<rect x="476" y="152" width="8" height="420" fill="rgba(45,49,66,0.06)" stroke="#4f5d75" stroke-width="0.8"/>
+<rect x="1036" y="236" width="8" height="36" fill="rgba(45,49,66,0.06)" stroke="#4f5d75" stroke-width="0.8"/>
+<rect x="756" y="420" width="8" height="36" fill="rgba(45,49,66,0.06)" stroke="#4f5d75" stroke-width="0.8"/>
+<!-- Arrows (drawn before nodes) -->
+<defs><marker id="seller-stats-excel-sequence-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker></defs>
+<path d="M 204,160 H 476" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#seller-stats-excel-sequence-arrow-link)"/>
+<path d="M 484,240 H 1036" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#seller-stats-excel-sequence-arrow-link)"/>
+<path d="M 1036,268 H 484" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#seller-stats-excel-sequence-arrow)"/>
+<path d="M 484,292 H 516 Q 524,292 524,300 V 308 Q 524,316 516,316 H 484" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#seller-stats-excel-sequence-arrow)"/>
+<path d="M 476,348 H 204" fill="none" stroke="#bf4520" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#seller-stats-excel-sequence-arrow-accent)"/>
+<path d="M 484,424 H 756" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#seller-stats-excel-sequence-arrow-link)"/>
+<path d="M 756,452 H 484" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#seller-stats-excel-sequence-arrow)"/>
+<path d="M 484,476 H 516 Q 524,476 524,484 V 492 Q 524,500 516,500 H 484" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#seller-stats-excel-sequence-arrow)"/>
+<path d="M 476,532 H 204" fill="none" stroke="#bf4520" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#seller-stats-excel-sequence-arrow-accent)"/>
+<!-- Arrow labels -->
+<rect x="300" y="142" width="80" height="12" rx="2" fill="#f5f5f5"/>
+<text x="340" y="151" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CREATE EXCEL</text>
+<rect x="580" y="222" width="80" height="12" rx="2" fill="#f5f5f5"/>
+<text x="620" y="231" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">FETCH 10,000</text>
+<rect x="602" y="250" width="36" height="12" rx="2" fill="#f5f5f5"/>
+<text x="620" y="259" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ROWS</text>
+<rect x="532" y="298" width="76" height="12" rx="2" fill="#f5f5f5"/>
+<text x="570" y="307" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CREATE ROWS</text>
+<rect x="300" y="330" width="80" height="12" rx="2" fill="#f5f5f5"/>
+<text x="340" y="339" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">STREAM CHUNK</text>
+<rect x="576" y="406" width="88" height="12" rx="2" fill="#f5f5f5"/>
+<text x="620" y="415" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">PAGE 100 ROWS</text>
+<rect x="602" y="434" width="36" height="12" rx="2" fill="#f5f5f5"/>
+<text x="620" y="443" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ROWS</text>
+<rect x="532" y="482" width="76" height="12" rx="2" fill="#f5f5f5"/>
+<text x="570" y="491" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CREATE ROWS</text>
+<rect x="300" y="514" width="80" height="12" rx="2" fill="#f5f5f5"/>
+<text x="340" y="523" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">STREAM CHUNK</text>
+<!-- Nodes -->
+<rect x="112" y="48" width="176" height="56" rx="6" fill="#f5f5f5"/>
+<rect x="112" y="48" width="176" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<g transform="translate(124,68) scale(1)" fill="none" stroke="#2d3142" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /> <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /> <path d="M7 8l0 .01" /> <path d="M7 16l0 .01" /></g>
+<text x="216" y="78" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">통계 FE</text>
+<text x="216" y="94" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">browser</text>
+<rect x="392" y="48" width="176" height="56" rx="6" fill="#f5f5f5"/>
+<rect x="392" y="48" width="176" height="56" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+<g transform="translate(404,68) scale(1)" fill="none" stroke="#bf4520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /> <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /> <path d="M7 8l0 .01" /> <path d="M7 16l0 .01" /></g>
+<text x="496" y="78" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">엑셀 서버</text>
+<text x="496" y="94" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">Node.js · exceljs</text>
+<rect x="672" y="48" width="176" height="56" rx="6" fill="#f5f5f5"/>
+<rect x="672" y="48" width="176" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<g transform="translate(684,68) scale(1)" fill="none" stroke="#2d3142" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /> <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /> <path d="M7 8l0 .01" /> <path d="M7 16l0 .01" /></g>
+<text x="776" y="78" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">통계 BE</text>
+<text x="776" y="94" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">today data</text>
+<rect x="952" y="48" width="176" height="56" rx="6" fill="#f5f5f5"/>
+<rect x="952" y="48" width="176" height="56" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+<g transform="translate(964,68) scale(1)" fill="none" stroke="#4f5d75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /> <path d="M21 21l-6 -6" /></g>
+<text x="1056" y="78" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">Elasticsearch</text>
+<text x="1056" y="94" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">period data</text>
+<line x1="32" y1="608" x2="1248" y2="608" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+<text x="32" y="628" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+<line x1="32" y1="647" x2="60" y2="647" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#seller-stats-excel-sequence-arrow-link)"/>
+<text x="68" y="652" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">요청</text>
+<line x1="120" y1="647" x2="148" y2="647" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#seller-stats-excel-sequence-arrow)"/>
+<text x="156" y="652" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">응답</text>
+<line x1="208" y1="647" x2="236" y2="647" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#seller-stats-excel-sequence-arrow)"/>
+<text x="244" y="652" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">자체 처리</text>
+<line x1="380" y1="647" x2="408" y2="647" stroke="#bf4520" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#seller-stats-excel-sequence-arrow-accent)"/><text x="416" y="652" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">스트림 응답</text>
+</svg>
+    </div>
+  </div>
+</body>
+</html>
