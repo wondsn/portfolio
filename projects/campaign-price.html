@@ -50,7 +50,7 @@
           <div class="star-item">
             <span class="star-key">T</span>
             <h3>Task · 과제</h3>
-            <p>참여상품 데이터를 미리 만들어 두고 쿠폰·검색 쪽에 그대로 싱크하는 구조로 바꾸는 것이 목표였습니다. BE 1명, 데이터 엔지니어 1명으로 진행했고, 저는 데이터 파이프라인을 맡았습니다.</p>
+            <p>참여상품 데이터를 미리 만들어 두고 쿠폰·검색 쪽에는 변경된 데이터만 싱크하는 구조로 바꾸는 것이 목표였습니다. BE 1명, 데이터 엔지니어 1명으로 진행했고, 저는 데이터 파이프라인을 맡았습니다.</p>
             <ul class="star-list"><li>Databricks 참여상품 집계</li><li>집계한 참여상품의 RDB · Redis 데이터 서빙</li><li>제외 대상 상품 집계 및 Kafka 토픽 발행</li></ul>
           </div>
           <div class="star-item">
@@ -61,7 +61,7 @@
           <div class="star-item">
             <span class="star-key">R</span>
             <h3>Result · 결과</h3>
-            <ul class="star-list"><li>300만~500만 건의 참여상품을 15분 주기로 집계</li><li>이벤트 시작 전에 참여상품 데이터를 준비할 수 있는 구조로 전환</li><li>싱크할 때마다 다시 집계하던 과정을 없애 쿠폰·검색 싱크 구조의 운영·유지보수 효율화</li></ul>
+            <ul class="star-list"><li>300만~500만 건의 참여상품을 15분 주기로 집계</li><li>이벤트 시작 전에 참여상품 데이터를 준비할 수 있는 구조로 전환</li><li>쿠폰·검색에는 변경된 참여상품만 싱크해 싱크 시간 단축</li></ul>
           </div>
       </div>
     </section>
@@ -69,7 +69,7 @@
     <section id="metrics" class="section container">
       <h2 class="section-title"><span>02</span> 핵심 성과</h2>
       <dl class="stats metrics one">
-          <div><dt>검색 · 쿠폰 싱크</dt><dd>싱크 시간 효율화</dd><p>참여상품을 미리 집계해 두고 그대로 싱크해, 싱크할 때마다 하던 재집계 제거</p></div>
+          <div><dt>검색 · 쿠폰 싱크</dt><dd>싱크 시간 단축</dd><p>미리 집계한 참여상품 중 변경된 데이터만 싱크</p></div>
       </dl>
     </section>
 
@@ -78,7 +78,7 @@
       <ul class="decision-list">
           <li>
             <h3>참여상품 사전 집계</h3>
-            <p>'전체 상품 − 예외 상품' 구조에서는 예외 상품이 늘어날수록 싱크 시점의 계산량이 커졌습니다. 그래서 Databricks에서 참여상품을 미리 집계해 두고, 쿠폰·검색 쪽은 집계된 결과를 그대로 받아 가도록 바꿨습니다.</p>
+            <p>'전체 상품 − 예외 상품' 구조에서는 예외 상품이 늘어날수록 싱크 시점의 계산량이 커졌습니다. 그래서 Databricks에서 참여상품을 미리 집계해 두고, 쿠폰·검색 쪽에는 이전 집계와 비교해 변경된 데이터만 싱크하도록 바꿨습니다.</p>
           </li>
           <li>
             <h3>RDB + Redis 서빙 분리</h3>
